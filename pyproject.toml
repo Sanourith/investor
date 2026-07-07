@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=75", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "finance-optimizer"
+version = "0.1.0"
+description = "Portfolio optimizer for cryptocurrencies and stocks"
+readme = "README.md"
+requires-python = ">=3.12"
+
+authors = [
+    { name = "Psowl" }
+]
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["apps"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = [
+    "apps",
+    "libs"
+]
