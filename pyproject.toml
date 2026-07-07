@@ -13,15 +13,24 @@ authors = [
     { name = "Psowl" }
 ]
 
+dependencies = [
+    "pandas",
+    "yfinance",
+]
+
 [tool.setuptools]
 include-package-data = true
 
 [tool.setuptools.packages.find]
-where = ["apps"]
+where = ["."]
+
+include = [
+    "apps*",
+    "libs*",
+]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = [
-    "apps",
     "libs"
 ]
