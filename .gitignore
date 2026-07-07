@@ -1,3 +1,7 @@
+# Environments
+.env
+env/
+
 # Data
 /data/
 /99_old_struct/data/
