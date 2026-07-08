@@ -22,9 +22,5 @@ def get_price(ticker: str) -> PriceResult:
             "Time": datetime.now().strftime("%H:%M:%S"),
         }
 
-    except Exception as e:
-        return {
-            "Price": None,
-            "Time": datetime.now().strftime("%H:%M:%S"),
-            "Error": str(e),
-        }
+    except Exception:
+        return {"Price": None, "Time": datetime.now().strftime("%H:%M:%S")}

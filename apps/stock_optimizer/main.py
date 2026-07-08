@@ -49,7 +49,7 @@ tickers = {
 
 if __name__ == "__main__":
     data = {}
-    print("Processing, please wait")
+    print("Processing, please wait...")
     for ticker, name in tickers.items():
         result = get_price(ticker)
         result["Name"] = name
