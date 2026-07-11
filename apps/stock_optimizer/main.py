@@ -1,8 +1,7 @@
-import os
 from datetime import datetime
 
 import pandas as pd
-from libs.market_data.yahoo import get_price
+from libs.market_data.yahoo import data_raw_csv, get_price
 
 tickers = {
     "^FCHI": "CAC 40 (Indice)",
@@ -61,10 +60,4 @@ if __name__ == "__main__":
 
     print(f"CAC40 stock values at {datetime.now().strftime('%H:%M')} :")
     print(df)
-
-    date_h = datetime.now().strftime("%d%m_%H")
-    output_dir = "data/raw"
-    os.makedirs(output_dir, exist_ok=True)
-    filepath = os.path.join(output_dir, f"stock_values_{date_h}.csv")
-    df.to_csv(filepath, index=True)
-    print(f"Data saved at {filepath}")
+    data_raw_csv(df)
