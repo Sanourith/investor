@@ -1,7 +1,11 @@
+import logging
 from datetime import datetime
 
 import pandas as pd
-from libs.market_data.yahoo import data_raw_csv, get_price
+from libs.market_data.yahoo import data_raw_csv, get_prices
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 tickers = {
     "^FCHI": "CAC 40 (Indice)",
@@ -47,12 +51,11 @@ tickers = {
 }
 
 if __name__ == "__main__":
-    data = {}
-    print("Processing, please wait...")
+    logger.info("Récupération des prix pour %d tickers...", len(tickers))
+    data = get_prices(tickers)
+
     for ticker, name in tickers.items():
-        result = get_price(ticker)
-        result["Name"] = name
-        data[ticker] = result
+        data[ticker]["Name"] = name
 
     df = pd.DataFrame(data).T
     df = df[["Name", "Price", "Time"]]
