@@ -2,6 +2,7 @@ import logging
 from datetime import datetime
 
 import pandas as pd
+from libs.market_data.stock_compare import build_analysis, save_analysis
 from libs.market_data.yahoo import data_raw_csv, get_prices
 
 logging.basicConfig(level=logging.INFO)
@@ -64,3 +65,8 @@ if __name__ == "__main__":
     print(f"CAC40 stock values at {datetime.now().strftime('%H:%M')} :")
     print(df)
     data_raw_csv(df)
+
+    logging.basicConfig(level=logging.INFO)
+    analysis_df = build_analysis()
+    print(analysis_df)
+    save_analysis(analysis_df)
