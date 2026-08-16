@@ -7,7 +7,7 @@ cd ~/work/investor
 source venv_finance/bin/activate
 python apps/btc_optimizer/main.py
 
-sleep 2
+sleep 1
 
 python apps/stock_optimizer/main.py
 deactivate
