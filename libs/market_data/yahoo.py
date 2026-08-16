@@ -10,7 +10,7 @@ from libs.market_data.models import PriceResult
 logger = logging.getLogger(__name__)
 
 
-def get_prices(tickers: dict[str, str]) -> pd.DataFrame:
+def get_prices(tickers: dict[str, str]) -> dict[str, PriceResult]:
     symbols = list(tickers.keys())
 
     try:
@@ -47,8 +47,10 @@ def get_prices(tickers: dict[str, str]) -> pd.DataFrame:
             logger.warning("File not found: %s (%s), fallback .info", ticker, name)
             price = _fallback_single_price(ticker)
 
-        results[ticker] = {"Price": price, "Time": now}
-
+        results[ticker] = {
+            "Price": price,
+            "Time": now,
+        }
     return results
 
 
@@ -64,7 +66,7 @@ def _fallback_single_price(ticker: str) -> float | None:
 
 
 def data_raw_csv(df: pd.DataFrame) -> None:
-    date_h = datetime.now().strftime("%y%m%d_%H")
+    date_h = datetime.now().strftime("%y%m%d")
     output_dir = "data/raw"
     os.makedirs(output_dir, exist_ok=True)
     filepath = os.path.join(output_dir, f"stock_values_{date_h}.csv")
