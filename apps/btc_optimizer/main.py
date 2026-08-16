@@ -19,6 +19,7 @@ def main():
         return
 
     df = klines_to_dataframe(klines)
+    print(df)
     filepath = save_to_csv(df)
     print(f"Row for {reference_date.strftime('%d/%m/%Y')} saved at {filepath}")
 

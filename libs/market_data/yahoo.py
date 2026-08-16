@@ -11,7 +11,6 @@ logger = logging.getLogger(__name__)
 
 
 def get_prices(tickers: dict[str, str]) -> pd.DataFrame:
-    """Récupère les derniers prix pour un batch de tickers en un seul appel réseau."""
     symbols = list(tickers.keys())
 
     try:
@@ -23,9 +22,7 @@ def get_prices(tickers: dict[str, str]) -> pd.DataFrame:
             progress=False,
         )
     except Exception:
-        logger.exception(
-            "Échec du téléchargement batch yfinance pour %d tickers", len(symbols)
-        )
+        logger.exception("Failed getting data for %d tickers", len(symbols))
         raw = pd.DataFrame()
 
     now = datetime.now().strftime("%H:%M:%S")
@@ -44,12 +41,10 @@ def get_prices(tickers: dict[str, str]) -> pd.DataFrame:
             if not close.empty:
                 price = round(float(close.iloc[-1]), 2)
         except (KeyError, IndexError):
-            logger.warning("Pas de données pour le ticker %s (%s)", ticker, name)
+            logger.warning("No data for ticker %s (%s)", ticker, name)
 
         if price is None:
-            logger.warning(
-                "Prix introuvable pour %s (%s), fallback .info", ticker, name
-            )
+            logger.warning("File not found: %s (%s), fallback .info", ticker, name)
             price = _fallback_single_price(ticker)
 
         results[ticker] = {"Price": price, "Time": now}
@@ -58,21 +53,20 @@ def get_prices(tickers: dict[str, str]) -> pd.DataFrame:
 
 
 def _fallback_single_price(ticker: str) -> float | None:
-    """Filet de sécurité si le batch a raté un ticker : on retente en individuel."""
     try:
         stock = yf.Ticker(ticker)
         hist = stock.history(period="1d")
         if not hist.empty:
             return round(float(hist["Close"].iloc[-1]), 2)
     except Exception:
-        logger.exception("Échec du fallback individuel pour %s", ticker)
+        logger.exception("Failed individual callback for %s", ticker)
     return None
 
 
 def data_raw_csv(df: pd.DataFrame) -> None:
-    date_h = datetime.now().strftime("%d%m_%H")
+    date_h = datetime.now().strftime("%y%d%m_%H")
     output_dir = "data/raw"
     os.makedirs(output_dir, exist_ok=True)
     filepath = os.path.join(output_dir, f"stock_values_{date_h}.csv")
     df.to_csv(filepath, index=True)
-    logger.info("Données sauvegardées : %s", filepath)
+    logger.info("Data saved at: %s", filepath)
