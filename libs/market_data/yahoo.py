@@ -64,7 +64,7 @@ def _fallback_single_price(ticker: str) -> float | None:
 
 
 def data_raw_csv(df: pd.DataFrame) -> None:
-    date_h = datetime.now().strftime("%y%d%m_%H")
+    date_h = datetime.now().strftime("%y%m%d_%H")
     output_dir = "data/raw"
     os.makedirs(output_dir, exist_ok=True)
     filepath = os.path.join(output_dir, f"stock_values_{date_h}.csv")
