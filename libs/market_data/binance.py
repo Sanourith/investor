@@ -1,5 +1,6 @@
 from datetime import datetime
 from pathlib import Path
+from typing import TypeAlias
 
 import pandas as pd
 import requests
@@ -26,9 +27,17 @@ COLUMNS = [
     "ignore",
 ]
 
+Kline: TypeAlias = list[str | int]
+Klines: TypeAlias = list[Kline]
 
-def fetch_klines(symbol: str, interval: str, start_ms: int, end_ms: int) -> list:
-    params = {
+
+def fetch_klines(
+    symbol: str,
+    interval: str,
+    start_ms: int,
+    end_ms: int,
+) -> list[Kline]:
+    params: dict[str, str | int] = {
         "symbol": symbol,
         "interval": interval,
         "startTime": start_ms,
@@ -37,11 +46,11 @@ def fetch_klines(symbol: str, interval: str, start_ms: int, end_ms: int) -> list
     }
 
     response = requests.get(BASE_URL, params=params, timeout=10)
-    response.raise_for_status()  # shows exception if fail
+    response.raise_for_status()
     return response.json()
 
 
-def klines_to_dataframe(klines: list) -> pd.DataFrame:
+def klines_to_dataframe(klines: Klines) -> pd.DataFrame:
     df = pd.DataFrame(klines, columns=COLUMNS)
 
     num_cols = [
