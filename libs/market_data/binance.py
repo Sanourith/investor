@@ -1,3 +1,4 @@
+from datetime import datetime
 from pathlib import Path
 
 import pandas as pd
@@ -7,7 +8,8 @@ binance_url = "https://api.binance.com/"
 binance_api = "api/v3/klines"
 BASE_URL = f"{binance_url}{binance_api}"
 OUTPUT_DIR = Path("data/raw")
-FILENAME = "BINANCE_dailies_data.csv"
+FILENAME_TEMPLATE = "BINANCE_{symbol}_1d.csv"
+INTERVAL = "1d"  # 1 day
 
 COLUMNS = [
     "open_time",
@@ -67,9 +69,9 @@ def klines_to_dataframe(klines: list) -> pd.DataFrame:
     return df
 
 
-def save_to_csv(dataframe: pd.DataFrame) -> Path:
+def save_to_csv(dataframe: pd.DataFrame, symbol: str) -> Path:
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    filepath = OUTPUT_DIR / FILENAME
+    filepath = OUTPUT_DIR / FILENAME_TEMPLATE.format(symbol=symbol)
 
     if filepath.exists():
         existing = pd.read_csv(filepath, parse_dates=["open_time", "close_time"])
@@ -81,3 +83,25 @@ def save_to_csv(dataframe: pd.DataFrame) -> Path:
 
     combined.to_csv(filepath, index=False)
     return filepath
+
+
+def process_symbol(
+    symbol: str, start_ms: int, end_ms: int, reference_date: datetime
+) -> None:
+    print(f"Getting {symbol} data from {reference_date.strftime('%d/%m/%Y')} (UTC)...")
+
+    try:
+        klines = fetch_klines(symbol, INTERVAL, start_ms, end_ms)
+    except Exception as exc:
+        print(f"ERROR [{symbol}] : fetch failed ({exc})")
+        return
+
+    if not klines:
+        print(f"ERROR [{symbol}] : No data requested #check symbol & hour")
+        return
+
+    df = klines_to_dataframe(klines)
+    filepath = save_to_csv(df, symbol)
+    print(
+        f"[{symbol}] row for {reference_date.strftime('%d/%m/%Y')} saved at {filepath}"
+    )
