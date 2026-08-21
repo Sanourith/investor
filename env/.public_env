@@ -1,7 +1,7 @@
 # COPY ALL THIS SCRIPT INTO env/.env file, THEN ADAPT FOR YOUR USE
 
 # Symbols are values you're scrapping from Binance
-SYMBOLS=BTCEUR,ETHEUR,SOLEUR
+SYMBOLS=BTCEUR,ETHEUR,SOLEUR,BCHEUR
 # Val_COIN are middle price you've earned about this curr (if exists)
 VAL_BTC=1000
 VAL_ETH=1000
