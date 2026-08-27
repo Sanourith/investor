@@ -48,7 +48,7 @@ def build_symbol_row(
         "crypto": symbol[:-3],
         "current_price": current_price,
         "past_day": _pct_change(
-            current_price, _price_n_days_ago(history, reference_date, 1)
+            current_price, _price_n_days_ago(history, reference_date, 0)
         ),
         "past_week": _pct_change(
             current_price, _price_n_days_ago(history, reference_date, 7)
