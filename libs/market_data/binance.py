@@ -8,6 +8,8 @@ import requests
 binance_url = "https://api.binance.com/"
 binance_api = "api/v3/klines"
 BASE_URL = f"{binance_url}{binance_api}"
+PRICE_URL = f"{binance_url}api/v3/ticker/price"
+
 OUTPUT_DIR = Path("data/raw")
 FILENAME_TEMPLATE = "BINANCE_{symbol}_1d.csv"
 INTERVAL = "1d"  # 1 day
@@ -48,6 +50,17 @@ def fetch_klines(
     response = requests.get(BASE_URL, params=params, timeout=10)
     response.raise_for_status()
     return response.json()
+
+
+def fetch_current_price(symbol: str) -> float:
+    """
+    Récupère le dernier prix traité par Binance, en temps réel
+    (contrairement à fetch_klines qui donne des données historiques
+    figées par bougie).
+    """
+    response = requests.get(PRICE_URL, params={"symbol": symbol}, timeout=10)
+    response.raise_for_status()
+    return float(response.json()["price"])
 
 
 def klines_to_dataframe(klines: Klines) -> pd.DataFrame:
@@ -97,7 +110,6 @@ def save_to_csv(dataframe: pd.DataFrame, symbol: str) -> Path:
 def process_symbol(
     symbol: str, start_ms: int, end_ms: int, reference_date: datetime
 ) -> None:
-    print(f"Getting {symbol} data from {reference_date.strftime('%d/%m/%Y')} (UTC)...")
 
     try:
         klines = fetch_klines(symbol, INTERVAL, start_ms, end_ms)
