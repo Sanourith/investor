@@ -2,17 +2,17 @@ beautifulsoup4==4.15.0
 certifi==2026.7.22
 cffi==2.1.1
 charset-normalizer==3.5.1
-curl_cffi==0.16.0
+curl_cffi==0.16.2
 dotenv==0.9.9
--e git+ssh://git@github.com/Sanourith/investor.git@a018b29daa380ea63a8a5474b65ba686253d8e79#egg=finance_optimizer
+-e git+ssh://git@github.com/Sanourith/investor.git@f3b8cf08d12c81dacd7b70c7555ff18507d1b8fd#egg=finance_optimizer
 idna==3.19
 lxml==6.1.2
 multitasking==0.0.13
 numpy==2.5.2
 pandas==3.0.5
-peewee==4.3.0
-platformdirs==4.11.3
-protobuf==7.35.1
+peewee==4.4.0
+platformdirs==4.11.4
+protobuf==7.36.0
 pycparser==3.0
 python-dateutil==2.9.0.post0
 python-dotenv==1.2.3
@@ -22,5 +22,5 @@ six==1.17.0
 soupsieve==2.9.2
 typing_extensions==4.16.0
 urllib3==2.7.0
-websockets==17.0.1
-yfinance==1.6.0
+websockets==17.1
+yfinance==1.7.0
