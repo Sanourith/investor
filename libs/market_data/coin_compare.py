@@ -82,4 +82,5 @@ def write_analysis(rows: list[dict]) -> Path:
 
     df = pd.DataFrame(rows)
     df.to_csv(filepath, index=False)
+    print(df)
     return filepath
