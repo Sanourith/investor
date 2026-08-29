@@ -21,6 +21,9 @@ python apps/btc_optimizer.py
 python apps/stock_optimizer/main.py
 ```
 
+If you want to automatize the execution of getting/analyze data, you might create a crontab with apps/crontab_script.sh
+
+
 # BOT ALERTING
 Personalize your treshold_percentage into apps/btc_optimizer.py variable (default 8%)
 It will allow alerting for +/- 8% on your cryptos
