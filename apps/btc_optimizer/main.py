@@ -1,9 +1,12 @@
 from datetime import datetime, timezone
 
-from libs.common.config import get_cost_basis, get_symbols
+from libs.common.config import get_cost_basis, get_symbols, get_telegram_credentials
 from libs.common.utils.utils import get_j1_range_utc
 from libs.market_data.binance import process_symbol
-from libs.market_data.coin_compare import build_symbol_row, write_analysis
+from libs.market_data.coin_compare import build_alerts, build_symbol_row, write_analysis
+from libs.notifications.telegram import send_telegram_message
+
+ALERT_TRESHOLD_PCT = 7.0
 
 
 def main():
@@ -22,7 +25,16 @@ def main():
             print(f"ERROR: [{symbol}] : {exc}")
 
     filepath = write_analysis(rows)
-    print(f"Analysis available in {filepath}")
+    print(f"Last analysis available in {filepath}")
+
+    alerts = build_alerts(rows, treshold=ALERT_TRESHOLD_PCT)
+    if alerts:
+        message = f"Crypto ({ALERT_TRESHOLD_PCT}%) :\n" + "\n".join(alerts)
+        try:
+            token, chat_id = get_telegram_credentials()
+            send_telegram_message(token, chat_id, message)
+        except Exception as exc:
+            print(f"ERROR : Telegram failed ({exc})")
 
 
 if __name__ == "__main__":

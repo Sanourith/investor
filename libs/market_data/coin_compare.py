@@ -84,3 +84,17 @@ def write_analysis(rows: list[dict]) -> Path:
     df.to_csv(filepath, index=False)
     print(df)
     return filepath
+
+
+def build_alerts(rows: list[dict], treshold: float = 8.0) -> list[str]:
+    alerts = []
+    for row in rows:
+        value = row.get("actual_value")
+        row_name = row.get("crypto")
+        if value is None:
+            continue
+        if abs(value) >= treshold:
+            sign = "+" if value >= 0 else ""
+            alerts.append(f"{row['crypto']} : {sign}{value}% since purchase.")
+            print(f"Alert sent for {row_name} at {sign}{value}%")
+    return alerts

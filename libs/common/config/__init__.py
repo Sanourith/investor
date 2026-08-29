@@ -30,3 +30,13 @@ def get_cost_basis(symbol: str) -> float | None:
         raise RuntimeError(
             f"{env_key}='{value}' invalid in {ENV_PATH} (must be an INT or empty)"
         )
+
+
+def get_telegram_credentials():
+    token = os.getenv("TELEGRAM_BOT_TOKEN")
+    chat_id = os.getenv("TELEGRAM_CHAT_ID")
+    if not token or not chat_id:
+        raise RuntimeError(
+            f"TELEGRAM_BOT_TOKEN et TELEGRAM_CHAT_ID must be defined in {ENV_PATH}"
+        )
+    return token, chat_id
