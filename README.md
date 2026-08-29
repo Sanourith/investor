@@ -6,6 +6,8 @@ git clone https://github.com/Sanourith/investor.git
 cd investor
 ```
 
+Create a env/.env file, copying .public_env file with your own datas
+
 Activate virtual environment and update pip with managed package & classic needs:
 ```bash
 python3 -m venv venv_finance # create venv
