@@ -2,10 +2,12 @@ import logging
 from datetime import datetime
 
 import pandas as pd
+from libs.market_data.stock_compare import build_analysis, save_analysis
 from libs.market_data.yahoo import data_raw_csv, get_prices
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+today = datetime.now()
 
 tickers = {
     "^FCHI": "CAC 40 (Indice)",
@@ -52,20 +54,24 @@ tickers = {
 
 if __name__ == "__main__":
     logger.info("Récupération des prix pour %d tickers...", len(tickers))
-    data = get_prices(tickers)
+    if datetime.now().weekday() not in (5, 6):
+        data = get_prices(tickers)
 
-    for ticker, name in tickers.items():
-        data[ticker]["Name"] = name
+        for ticker, name in tickers.items():
+            data[ticker]["Name"] = name
 
-    df = pd.DataFrame(data).T
-    df = df[["Name", "Price", "Time"]]
-    df.index.name = "Ticker"
+        df = pd.DataFrame(data).T
+        df = df[["Name", "Price", "Time"]]
+        df.index.name = "Ticker"
 
-    print(f"CAC40 stock values at {datetime.now().strftime('%H:%M')} :")
-    print(df)
-    data_raw_csv(df)
+        print(f"CAC40 stock values at {datetime.now().strftime('%H:%M')} :")
+        print(df)
+        data_raw_csv(df)
+
+    else:
+        print(f"Won't be treated because it's {today.strftime('%A')}")
 
     # logging.basicConfig(level=logging.INFO)
-    # analysis_df = build_analysis()
-    # print(analysis_df)
-    # save_analysis(analysis_df)
+    analysis_df = build_analysis()
+    print(analysis_df)
+    save_analysis(analysis_df)
