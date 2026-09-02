@@ -1,0 +1,19 @@
+services:
+  postgres:
+    image: postgres:18
+    container_name: market-postgres
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_DB: market_data
+      POSTGRES_USER: psowl
+      POSTGRES_PASSWORD: password
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql
+
+volumes:
+  postgres_data:
