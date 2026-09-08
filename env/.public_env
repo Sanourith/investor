@@ -9,5 +9,6 @@ VAL_SOL=1000
 
 # Notifications TELEGRAM
 # name=""
+TRESHOLD=
 TELEGRAM_BOT_TOKEN=""
 TELEGRAM_CHAT_ID=""

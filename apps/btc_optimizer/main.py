@@ -1,15 +1,19 @@
 from datetime import datetime, timezone
 
-from libs.common.config import get_cost_basis, get_symbols, get_telegram_credentials
+from libs.common.config import (
+    get_alert_threshold,
+    get_cost_basis,
+    get_symbols,
+    get_telegram_credentials,
+)
 from libs.common.utils.utils import get_j1_range_utc
 from libs.market_data.binance import process_symbol
 from libs.market_data.coin_compare import build_alerts, build_symbol_row, write_analysis
 from libs.notifications.telegram import send_telegram_message
 
-ALERT_TRESHOLD_PCT = 7.0
-
 
 def main():
+    alert_treshold_pct = get_alert_threshold()
     start_ms, end_ms = get_j1_range_utc()
     reference_date = datetime.fromtimestamp(start_ms / 1000, tz=timezone.utc)
 
@@ -27,9 +31,9 @@ def main():
     filepath = write_analysis(rows)
     print(f"Last analysis available in {filepath}")
 
-    alerts = build_alerts(rows, treshold=ALERT_TRESHOLD_PCT)
+    alerts = build_alerts(rows, treshold=alert_treshold_pct)
     if alerts:
-        message = f"Crypto ({ALERT_TRESHOLD_PCT}%) :\n" + "\n".join(alerts)
+        message = f"Crypto ({alert_treshold_pct}%) :\n" + "\n".join(alerts)
         try:
             token, chat_id = get_telegram_credentials()
             send_telegram_message(token, chat_id, message)

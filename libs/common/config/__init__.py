@@ -5,8 +5,22 @@ from dotenv import load_dotenv
 
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
 ENV_PATH = PROJECT_ROOT / "env" / ".env"
+DEFAULT_ALERT_THRESHOLD_PCT = 7.0
 
 load_dotenv(dotenv_path=ENV_PATH)
+
+
+def get_alert_threshold() -> float:
+    raw = os.getenv("TRESHOLD")
+    if raw is None or raw.strip() == "":
+        return DEFAULT_ALERT_THRESHOLD_PCT
+    try:
+        return float(raw)
+    except ValueError:
+        print(
+            f"WARNING: invalid TRESHOLD ('{raw}'), using ({DEFAULT_ALERT_THRESHOLD_PCT})"
+        )
+        return DEFAULT_ALERT_THRESHOLD_PCT
 
 
 def get_symbols() -> list[str]:
