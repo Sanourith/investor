@@ -32,6 +32,7 @@ tickers = {
     "MC.PA": "LVMH",
     "ML.PA": "Michelin",
     "ORA.PA": "Orange",
+    "OVH.PA": "OVH Cloud",
     "RI.PA": "Pernod Ricard",
     "PUB.PA": "Publicis Groupe",
     "RNO.PA": "Renault",
