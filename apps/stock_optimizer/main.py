@@ -66,7 +66,6 @@ if __name__ == "__main__":
         df.index.name = "Ticker"
 
         print(f"CAC40 stock values at {datetime.now().strftime('%H:%M')} :")
-        print(df)
         data_raw_csv(df)
 
     else:
